@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>登録情報</title>
+</head>
+
+<body>
+
+<h1>登録情報</h1>
+
+<p>アカウントID：{{ user.account_id }}</p>
+
+<p>ユーザー名：{{ user.user_name }}</p>
+
+<br>
+
+<a href="/main">
+<button>戻る</button>
+</a>
+
+<br><br>
+
+<form action="/delete_account" method="post">
+
+<button
+type="submit"
+onclick="return confirm('本当に削除しますか？')">
+
+アカウント削除
+
+</button>
+
+</form>
+
+</body>
+</html>

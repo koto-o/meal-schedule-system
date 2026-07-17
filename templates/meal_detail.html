@@ -1,0 +1,70 @@
+<form method="post">
+
+<h3>朝食</h3>
+<input
+type="radio"
+name="breakfast"
+value="1"
+{% if schedule and schedule.breakfast %}checked{% endif %}
+>
+必要
+
+<input
+type="radio"
+name="breakfast"
+value="0"
+{% if not schedule or not schedule.breakfast %}checked{% endif %}
+>
+不要
+
+<h3>昼食</h3>
+<input
+type="radio"
+name="lunch"
+value="1"
+{% if schedule and schedule.lunch %}checked{% endif %}
+>
+必要
+
+<input
+type="radio"
+name="lunch"
+value="0"
+{% if not schedule or not schedule.lunch %}checked{% endif %}
+>
+不要
+
+<h3>夕食</h3>
+<input
+type="radio"
+name="dinner"
+value="1"
+{% if schedule and schedule.dinner %}checked{% endif %}
+>
+必要
+
+<input
+type="radio"
+name="dinner"
+value="0"
+{% if not schedule or not schedule.dinner %}checked{% endif %}
+>
+不要
+
+<h3>帰宅時間</h3>
+<input
+type="time"
+name="return_time"
+value="{{ schedule.return_time if schedule else '' }}"
+>
+
+<h3>メッセージ</h3>
+<textarea name="message">{{ schedule.message if schedule else '' }}</textarea>
+
+<br><br>
+
+<button type="submit">
+登録
+</button>
+
+</form>
