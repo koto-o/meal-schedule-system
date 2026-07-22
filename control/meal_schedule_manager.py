@@ -86,7 +86,9 @@ class MealScheduleManager:
 
         cursor.execute("""
             SELECT
+                users.account_id,
                 users.user_name,
+
                 meal_schedules.breakfast_required,
                 meal_schedules.breakfast_message,
                        
@@ -222,7 +224,9 @@ class MealScheduleManager:
 
         cursor.execute("""
             SELECT
+                users.account_id,
                 users.user_name,
+                
                 breakfast_required,
                 breakfast_message,
                        

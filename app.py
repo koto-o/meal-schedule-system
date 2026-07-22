@@ -3,7 +3,7 @@ from control.account_manager import AccountManager
 from control.meal_schedule_manager import MealScheduleManager
 from control.group_manager import GroupManager
 import calendar
-from datetime import date
+from datetime import date, timedelta
 
 account_manager = AccountManager()
 group_manager = GroupManager()
@@ -11,6 +11,8 @@ meal_manager = MealScheduleManager()
 
 app = Flask(__name__)
 app.secret_key = "meal_schedule_secret"
+
+app.permanent_session_lifetime = timedelta(days=365)
 
 def get_login_user():
 
@@ -24,10 +26,14 @@ def get_login_user():
 @app.route("/")
 def index():
 
-    if session.get("account_id"):
+    user = get_login_user()
+
+    # 既に登録済みならそのままメインへ
+    if user is not None:
         return redirect("/main")
 
-    return render_template("index.html")
+    # 初回だけ登録画面へ
+    return redirect("/register")
 
 @app.route("/register")
 def register():
@@ -46,6 +52,7 @@ def register_post():
 
     user = account_manager.register_user(user_name)
 
+    session.permanent = True
     session["account_id"] = user.account_id
 
     return redirect("/main")
