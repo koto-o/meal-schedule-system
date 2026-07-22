@@ -43,7 +43,7 @@ class GroupManager:
         conn.close()
 
     def check_group_name_length(self, group_name):
-        return 0 < len(group_name) <= 20
+        return 0 < len(group_name) <= 10
 
     def has_group(self, account_id):
         conn = sqlite3.connect(self.db_name)
@@ -62,6 +62,9 @@ class GroupManager:
     def create_group(self, account_id, group_name):
         if self.has_group(account_id):
             raise ValueError("既にグループに所属しています。")
+
+        if not self.check_group_name_length(group_name):
+            raise ValueError("グループ名は1～6文字で入力してください")
 
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()

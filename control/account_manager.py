@@ -22,7 +22,7 @@ class AccountManager:
         conn.close()
 
     def check_user_name_length(self, user_name):
-        return 0 < len(user_name) <= 20
+        return 0 < len(user_name) <= 6
 
     def register_user(self, user_name):
         conn = sqlite3.connect(self.db_name)
