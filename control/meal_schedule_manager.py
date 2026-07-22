@@ -15,34 +15,21 @@ class MealScheduleManager:
             schedule_id INTEGER PRIMARY KEY AUTOINCREMENT,
             account_id INTEGER NOT NULL,
             target_date TEXT NOT NULL,
+                       
             breakfast_required INTEGER NOT NULL,
+            breakfast_message TEXT,
+                       
             lunch_required INTEGER NOT NULL,
+            lunch_message TEXT,
+                       
             dinner_required INTEGER NOT NULL,
+            dinner_message TEXT,
+                       
             return_time TEXT,
-            message TEXT,
+                       
             UNIQUE(account_id, target_date)
         )
         """)
-
-        conn.commit()
-        conn.close()
-
-    def set_one_meal_schedule(self, account_id, target_date, meal_type, required, return_time, message):
-        conn = sqlite3.connect(self.db_name)
-        cursor = conn.cursor()
-
-        cursor.execute("""
-            INSERT INTO meal_schedules (
-                account_id, target_date, meal_type, required, return_time, message
-            ) VALUES (?, ?, ?, ?, ?, ?)
-        """, (
-            account_id,
-            target_date,
-            meal_type,
-            int(required),
-            return_time,
-            message
-        ))
 
         conn.commit()
         conn.close()
@@ -55,29 +42,42 @@ class MealScheduleManager:
         cursor.execute("""
             SELECT
                 breakfast_required,
+                breakfast_message,
+
                 lunch_required,
+                lunch_message,
+
                 dinner_required,
-                return_time,
-                message
+                dinner_message,
+
+                return_time
             FROM meal_schedules
             WHERE
                 account_id=?
                 AND target_date=?
-        """,(account_id,target_date))
+        """,(account_id, target_date))
+
 
         row = cursor.fetchone()
 
         conn.close()
 
+
         if row is None:
             return None
 
+
         return {
             "breakfast": row[0],
-            "lunch": row[1],
-            "dinner": row[2],
-            "return_time": row[3] or "",
-            "message": row[4] or ""
+            "breakfast_message": row[1] or "",
+
+            "lunch": row[2],
+            "lunch_message": row[3] or "",
+
+            "dinner": row[4],
+            "dinner_message": row[5] or "",
+
+            "return_time": row[6] or ""
         }
     
     def get_group_schedule(self, group_id, target_date):
@@ -88,10 +88,16 @@ class MealScheduleManager:
             SELECT
                 users.user_name,
                 meal_schedules.breakfast_required,
+                meal_schedules.breakfast_message,
+                       
                 meal_schedules.lunch_required,
+                meal_schedules.lunch_message,
+                       
                 meal_schedules.dinner_required,
-                meal_schedules.return_time,
-                meal_schedules.message
+                meal_schedules.dinner_message,
+                       
+                meal_schedules.return_time
+                       
             FROM meal_schedules
             JOIN users
                 ON meal_schedules.account_id = users.account_id
@@ -114,11 +120,17 @@ class MealScheduleManager:
         self,
         account_id,
         target_date,
+
         breakfast_required,
+        breakfast_message,
+
         lunch_required,
+        lunch_message,
+
         dinner_required,
-        return_time,
-        message
+        dinner_message,
+
+        return_time
     ):
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()
@@ -137,42 +149,65 @@ class MealScheduleManager:
                 INSERT INTO meal_schedules(
                     account_id,
                     target_date,
+                           
                     breakfast_required,
+                    breakfast_message,
+                           
                     lunch_required,
+                    lunch_message,
+                           
                     dinner_required,
-                    return_time,
-                    message
+                    dinner_message,
+                           
+                    return_time
                 )
-                VALUES(?,?,?,?,?,?,?)
+                VALUES(?,?,?,?,?,?,?,?,?)
             """,(
                 account_id,
                 target_date,
-                int(breakfast_required),
-                int(lunch_required),
-                int(dinner_required),
-                return_time,
-                message
+
+                breakfast_required,
+                breakfast_message,
+
+                lunch_required,
+                lunch_message,
+                
+                dinner_required,
+                dinner_message,
+
+                return_time
             ))
 
         else:
 
             cursor.execute("""
-                UPDATE meal_schedules
-                SET
-                    breakfast_required=?,
-                    lunch_required=?,
-                    dinner_required=?,
-                    return_time=?,
-                    message=?
-                WHERE
-                    account_id=?
-                    AND target_date=?
+            UPDATE meal_schedules
+            SET
+                breakfast_required=?,
+                breakfast_message=?,
+
+                lunch_required=?,
+                lunch_message=?,
+
+                dinner_required=?,
+                dinner_message=?,
+
+                return_time=?
+            WHERE
+                account_id=?
+                AND target_date=?
             """,(
-                int(breakfast_required),
-                int(lunch_required),
-                int(dinner_required),
+                breakfast_required,
+                breakfast_message,
+
+                lunch_required,
+                lunch_message,
+
+                dinner_required,
+                dinner_message,
+
                 return_time,
-                message,
+
                 account_id,
                 target_date
             ))
@@ -189,10 +224,16 @@ class MealScheduleManager:
             SELECT
                 users.user_name,
                 breakfast_required,
+                breakfast_message,
+                       
                 lunch_required,
+                lunch_message,
+                       
                 dinner_required,
-                return_time,
-                message
+                dinner_message,
+                       
+                return_time
+                       
             FROM meal_schedules
             JOIN users
             ON meal_schedules.account_id=users.account_id

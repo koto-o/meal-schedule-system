@@ -16,6 +16,10 @@ value="0"
 {% if not schedule or not schedule.breakfast %}checked{% endif %}
 >
 不要
+<div id="breakfast_area">
+    <h4>朝食メッセージ</h4>
+    <textarea name="breakfast_message">{{ schedule.breakfast_message if schedule else '' }}</textarea>
+</div>
 
 <h3>昼食</h3>
 <input
@@ -33,6 +37,10 @@ value="0"
 {% if not schedule or not schedule.lunch %}checked{% endif %}
 >
 不要
+<div id="lunch_area">
+    <h4>昼食メッセージ</h4>
+    <textarea name="lunch_message">{{ schedule.lunch_message if schedule else '' }}</textarea>
+</div>
 
 <h3>夕食</h3>
 <input
@@ -50,16 +58,19 @@ value="0"
 {% if not schedule or not schedule.dinner %}checked{% endif %}
 >
 不要
+<div id="dinner_area">
+    <h4>夕食メッセージ</h4>
+    <textarea name="dinner_message">{{ schedule.dinner_message if schedule else '' }}</textarea>
+</div>
 
-<h3>帰宅時間</h3>
-<input
-type="time"
-name="return_time"
-value="{{ schedule.return_time if schedule else '' }}"
->
-
-<h3>メッセージ</h3>
-<textarea name="message">{{ schedule.message if schedule else '' }}</textarea>
+<div id="return_time_area">
+    <h3>帰宅時間</h3>
+    <input
+    type="time"
+    name="return_time"
+    value="{{ schedule.return_time if schedule else '' }}"
+    >
+</div>
 
 <br><br>
 
@@ -68,3 +79,42 @@ value="{{ schedule.return_time if schedule else '' }}"
 </button>
 
 </form>
+
+<script>
+function toggleInput() {
+
+    // 朝食メッセージ
+    document.getElementById("breakfast_area").style.display =
+        document.querySelector('input[name="breakfast"]:checked').value == "1"
+        ? "block" : "none";
+
+    // 昼食メッセージ
+    document.getElementById("lunch_area").style.display =
+        document.querySelector('input[name="lunch"]:checked').value == "1"
+        ? "block" : "none";
+
+    // 夕食メッセージ
+    document.getElementById("dinner_area").style.display =
+        document.querySelector('input[name="dinner"]:checked').value == "1"
+        ? "block" : "none";
+
+    // 帰宅時間（夕食が必要のときだけ）
+    document.getElementById("return_time_area").style.display =
+        document.querySelector('input[name="dinner"]:checked').value == "1"
+        ? "block" : "none";
+}
+
+document.querySelectorAll('input[name="breakfast"]').forEach(e =>
+    e.addEventListener("change", toggleInput)
+);
+
+document.querySelectorAll('input[name="lunch"]').forEach(e =>
+    e.addEventListener("change", toggleInput)
+);
+
+document.querySelectorAll('input[name="dinner"]').forEach(e =>
+    e.addEventListener("change", toggleInput)
+);
+
+toggleInput();
+</script>

@@ -157,6 +157,12 @@ function showDetail(date){
 
 }
 
+{% if selected_date %}
+window.onload = function () {
+    showDetail("{{ selected_date }}");
+};
+{% endif %}
+
 </script>
 
 </body>
