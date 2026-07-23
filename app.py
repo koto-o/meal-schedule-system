@@ -188,32 +188,32 @@ def meal_detail(target_date):
         lunch_message = request.form["lunch_message"]
         dinner_message = request.form["dinner_message"]
 
-    if len(breakfast_message) > 30:
-        schedule = meal_manager.get_schedule(user.account_id, target_date)
-        return render_template(
-            "meal_detail.html",
-            target_date=target_date,
-            schedule=schedule,
-            error="朝食メッセージは30文字以内で入力してください"
-        )
+        if len(breakfast_message) > 30:
+            schedule = meal_manager.get_schedule(user.account_id, target_date)
+            return render_template(
+                "meal_detail.html",
+                target_date=target_date,
+                schedule=schedule,
+                error="朝食メッセージは30文字以内で入力してください"
+            )
 
-    if len(lunch_message) > 30:
-        schedule = meal_manager.get_schedule(user.account_id, target_date)
-        return render_template(
-            "meal_detail.html",
-            target_date=target_date,
-            schedule=schedule,
-            error="昼食メッセージは30文字以内で入力してください"
-        )
+        if len(lunch_message) > 30:
+            schedule = meal_manager.get_schedule(user.account_id, target_date)
+            return render_template(
+                "meal_detail.html",
+                target_date=target_date,
+                schedule=schedule,
+                error="昼食メッセージは30文字以内で入力してください"
+            )
 
-    if len(dinner_message) > 30:
-        schedule = meal_manager.get_schedule(user.account_id, target_date)
-        return render_template(
-            "meal_detail.html",
-            target_date=target_date,
-            schedule=schedule,
-            error="夕食メッセージは30文字以内で入力してください"
-        )
+        if len(dinner_message) > 30:
+            schedule = meal_manager.get_schedule(user.account_id, target_date)
+            return render_template(
+                "meal_detail.html",
+                target_date=target_date,
+                schedule=schedule,
+                error="夕食メッセージは30文字以内で入力してください"
+            )
 
         # 不要なら内容を消す
         if not breakfast:
